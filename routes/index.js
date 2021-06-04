@@ -8,4 +8,12 @@ router.get("/", (req, res, next) => {
 
 router.use("/auth", authRoutes);
 
+const protectedRoutes = require("./protected");
+
+router.use("/protected", protectedRoutes);
+
+const profileRoutes = require("./profile");
+
+router.use("/profile", profileRoutes);
+
 module.exports = router;
