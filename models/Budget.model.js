@@ -4,15 +4,15 @@ const { Schema, model } = require("mongoose");
 const budgetModel = new Schema({
   month: String,
   income: {
-    passive: [Number],
-    active: [Number],
-    other: [Number],
+    passive: Number,
+    active: Number,
+    otherIncome: Number,
   },
   expenses: {
-    fixed: [Number],
-    variable: [Number],
-    periodic: [Number],
-    other: [Number],
+    fixed: Number,
+    variable: Number,
+    periodic: Number,
+    otherExpenses: Number,
   },
   user: { type: Schema.Types.ObjectId, ref: "User" },
 });
