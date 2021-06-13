@@ -97,10 +97,7 @@ router.delete("/delete/:id", (req, res, next) => {
   //     return res.json(found);
   //   }
   Budget.findByIdAndRemove({ _id: id })
-    .then((deletedBudget) => {
-      console.log("deletedBudget**", deletedBudget);
-      // res.redirect(`/profile`);
-    })
+    .then((deletedBudget) => {})
     .catch((err) => {
       console.log("deletedBudget error***", err);
     });

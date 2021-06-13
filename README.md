@@ -1,4 +1,4 @@
-# Backlog Quest
+# mi Budget
 
 <br>
 
@@ -26,6 +26,8 @@ This is an OPA that recieves and calculates personal budgets.
 - ~~Create Backend
 - ~~Deploy
 - ~~Make pizza
+- ~~show error if input form is empty
+- remove single month from state when deleting
 - create basic profile
 - return the sum of values
 - return result of subtracting both sums
