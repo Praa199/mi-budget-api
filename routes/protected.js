@@ -58,11 +58,8 @@ router.post("/form", (req, res, next) => {
     user,
   } = req.body;
 
-  Budget.findOne({ $or: [{ month: month }, { user: user._id }] }).then(
-    (found) => {
-      if (found) {
-        return res.json(found);
-      }
+  Budget.findOne({ $and: [{ user: user }, { month: month }] }).then((found) => {
+    if (!found) {
       Budget.create({
         month,
         income: {
@@ -86,7 +83,8 @@ router.post("/form", (req, res, next) => {
           console.log("createdBudget error***", err);
         });
     }
-  );
+    console.log("found", found);
+  });
 });
 
 router.put("/update/:budgetId", (req, res, next) => {
