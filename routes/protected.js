@@ -7,7 +7,7 @@ const isLoggedIn = require("../middleware/isLoggedIn");
 
 router.get("/table/:budgets", (req, res) => {
   const userId = req.params.budgets;
-  console.log("req.params***", userId);
+  // console.log("req.params***", userId);
   // we dont want to throw an error, and just maintain the user as null
   // if (!req.headers.authorization) {
   //   return res.json(null);
@@ -19,7 +19,7 @@ router.get("/table/:budgets", (req, res) => {
   Budget.find({ user: userId })
     // .populate("budget")
     .then((response) => {
-      console.log("budgets**", response);
+      // console.log("budgets**", response);
       if (!response) {
         //   return res
         //     .status(404)
@@ -58,33 +58,79 @@ router.post("/form", (req, res, next) => {
     user,
   } = req.body;
 
-  Budget.findOne({ month }).then((found) => {
-    if (found) {
-      return res.json(found);
+  Budget.findOne({ $or: [{ month: month }, { user: user._id }] }).then(
+    (found) => {
+      if (found) {
+        return res.json(found);
+      }
+      Budget.create({
+        month,
+        income: {
+          passive,
+          active,
+          otherIncome,
+        },
+        expenses: {
+          fixed,
+          variable,
+          periodic,
+          otherExpenses,
+        },
+        user: user._id,
+      })
+        .then((createdBudget) => {
+          console.log("createdBudget**", createdBudget);
+          // res.redirect(`/profile`);
+        })
+        .catch((err) => {
+          console.log("createdBudget error***", err);
+        });
     }
-    Budget.create({
-      month,
+  );
+});
+
+router.put("/update/:budgetId", (req, res, next) => {
+  // console.log("req**", req.body.user.budget);
+  console.log("month**", req.params.budgetId);
+  const id = req.params.budgetId;
+  const {
+    month,
+    passive,
+    active,
+    otherIncome,
+    fixed,
+    variable,
+    periodic,
+    otherExpenses,
+    user,
+  } = req.body;
+
+  Budget.findByIdAndUpdate(
+    id,
+    {
+      month: month,
       income: {
-        passive,
-        active,
-        otherIncome,
+        passive: passive,
+        active: active,
+        otherIncome: otherIncome,
       },
       expenses: {
-        fixed,
-        variable,
-        periodic,
-        otherExpenses,
+        fixed: fixed,
+        variable: variable,
+        periodic: periodic,
+        otherExpenses: otherExpenses,
       },
-      user: user._id,
+      user: user,
+    },
+    { new: true }
+  )
+    .then((updatedBudget) => {
+      console.log("updatedBudget**", updatedBudget);
+      // res.redirect(`/profile`);
     })
-      .then((createdBudget) => {
-        console.log("createdBudget**", createdBudget);
-        // res.redirect(`/profile`);
-      })
-      .catch((err) => {
-        console.log("createdBudget error***", err);
-      });
-  });
+    .catch((err) => {
+      console.log("updateBudget error***", err);
+    });
 });
 
 router.delete("/delete/:id", (req, res, next) => {
