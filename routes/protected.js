@@ -75,8 +75,10 @@ router.post("/form", (req, res, next) => {
         },
         user: user._id,
       })
-        .then((createdBudget) => {
-          console.log("createdBudget**", createdBudget);
+        .then((response) => {
+          console.log("createdBudget**", response);
+          return res.status(200).json(response);
+
           // res.redirect(`/profile`);
         })
         .catch((err) => {
@@ -124,6 +126,7 @@ router.put("/update/:budgetId", (req, res, next) => {
   )
     .then((updatedBudget) => {
       console.log("updatedBudget**", updatedBudget);
+      // res.json(updatedBudget);
       // res.redirect(`/profile`);
     })
     .catch((err) => {
